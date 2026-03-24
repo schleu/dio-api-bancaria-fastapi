@@ -18,8 +18,6 @@ def encrypt_password(password:str):
 
 async def create_user(payload:UserPayload)->User:
     try:
-        print('▶️ User Service')
-
         encrypted_password = encrypt_password(payload.password)
 
         user = models.User(
@@ -36,10 +34,9 @@ async def create_user(payload:UserPayload)->User:
         print(e)
 
 
-async def read_user(data:UserReadPayload)->List[User]:
+async def read_users(offset:int = 0, limit:int=10)->List[User]:
     try:
-        print('▶️ User Service')
-        user_created = await userDB.get_users(limit=data.limit, offset=data.offset)
+        user_created = await userDB.get_users(limit=limit, offset=offset)
         return user_created
     except Exception as e:
         print(e)
@@ -47,7 +44,6 @@ async def read_user(data:UserReadPayload)->List[User]:
 
 async def find_user(user_id:str)->User:
     try:
-        print('▶️ User Service')
         if not user_id:
             raise HTTPException(status_code=400, detail='User id request.')
         
@@ -55,6 +51,17 @@ async def find_user(user_id:str)->User:
 
         if not user:
             raise HTTPException(status_code=404, detail='User not founded')
+        return user
+    except Exception as e:
+        print(e)
+
+async def delete_user(user_id:str)->User:
+    try:
+        if not user_id:
+            raise HTTPException(status_code=400, detail='User id request.')
+        
+        user = await userDB.delete_user(user_id)
+
         return user
     except Exception as e:
         print(e)

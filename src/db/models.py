@@ -13,6 +13,7 @@ class User(SQLModel, table=True):
     id: str | None = Field(default_factory=create_id, primary_key=True)
     name: str = Field(index=True)
     password: str = Field(index=True)
+    deleted:bool = Field(default=False)
     accounts: List["Account"] = Relationship(back_populates='user')
 
 

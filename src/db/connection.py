@@ -1,6 +1,4 @@
 
-from typing import Annotated
-from fastapi import Depends
 from sqlmodel import create_engine, Session
 
 sqlite_file_name = "database.db"

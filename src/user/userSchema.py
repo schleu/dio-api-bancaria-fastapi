@@ -9,6 +9,6 @@ class UserPayload(BaseModel):
 class UserReadPayload():
     offset:int
     limit:int
-class User:
+class User():
     id:str
     name:str
