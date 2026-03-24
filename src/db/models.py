@@ -12,6 +12,7 @@ def create_id():
 class User(SQLModel, table=True):
     id: str | None = Field(default_factory=create_id, primary_key=True)
     name: str = Field(index=True)
+    email: str = Field(index=True)
     password: str = Field(index=True)
     deleted:bool = Field(default=False)
     accounts: List["Account"] = Relationship(back_populates='user')
@@ -19,6 +20,9 @@ class User(SQLModel, table=True):
 
 class Account(SQLModel, table=True):
     id: str | None = Field(default_factory=create_id, primary_key=True)
+    status: str = Field(index=True, default='actived')
+    created_date: datetime = Field(index=True, default_factory=datetime.now())
+    updated_date: datetime = Field(index=True, default_factory=datetime.now())
     agency: int = Field(index=True)
     number: int = Field(index=True)
     user_id: str | None = Field(default=None, foreign_key='user.id')

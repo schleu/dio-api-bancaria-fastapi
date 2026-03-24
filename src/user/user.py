@@ -16,7 +16,8 @@ async def create_user(user:UserPayload):
             raise HTTPException(status_code=400, detail='Error on create user')
         return {
             "id": user.id,
-            "name": user.name
+            "name": user.name,
+            "email": user.email
         }
     except Exception as e:
         print(e)

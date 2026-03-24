@@ -2,8 +2,8 @@ from src.db.models import create_db_and_tables
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from dotenv import load_dotenv
-from oauth import router as OauthRouter
 from src.user.user import router as UserRouter
+from src.account.account import router as AccountRouter
 from typing import AsyncGenerator
 import os
 
@@ -45,3 +45,4 @@ def get_data():
 
 # app.add_route(UserRouter)
 app.include_router(UserRouter)
+app.include_router(AccountRouter)

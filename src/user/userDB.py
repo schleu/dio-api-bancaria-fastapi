@@ -19,7 +19,7 @@ async def get_users(
         print(e)
 
 
-async def get_user(
+async def get_user_by_id(
     user_id:str
 )->User:
     try:
@@ -28,6 +28,18 @@ async def get_user(
         return user
     except Exception as e:
         print(f'❌ Error on get user with id {user_id}.')
+        print(e)
+
+
+async def get_user_by_email(
+    email:str
+)->User:
+    try:
+        user = db.exec(select(User).where(User.email == email).where(User.deleted == "0")).first()
+    
+        return user
+    except Exception as e:
+        print(f'❌ Error on get user with id {email}.')
         print(e)
 
 

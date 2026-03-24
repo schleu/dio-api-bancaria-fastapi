@@ -22,11 +22,18 @@ async def create_user(payload:UserPayload)->User:
 
         user = models.User(
             name=payload.name,
+            email=payload.email,
             password=encrypted_password
         )
-        
+
         # Alternativa mais curta
         #user = models.User(**payload.dict())
+
+        user_finded = await userDB.get_user_by_email(payload.email)
+
+        if user_finded:
+            raise HTTPException(status_code=400, detail='User already exist.')
+        
       
         user_created = await userDB.create_user(user=user)
         return user_created
@@ -47,7 +54,7 @@ async def find_user(user_id:str)->User:
         if not user_id:
             raise HTTPException(status_code=400, detail='User id request.')
         
-        user = await userDB.get_user(user_id)
+        user = await userDB.get_user_by_id(user_id)
 
         if not user:
             raise HTTPException(status_code=404, detail='User not founded')
