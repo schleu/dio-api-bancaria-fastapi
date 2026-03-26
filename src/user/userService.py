@@ -39,6 +39,7 @@ async def create_user(payload:UserPayload)->User:
         return user_created
     except Exception as e:
         print(e)
+        raise HTTPException(status_code=e.status_code, detail=e.detail)
 
 
 async def read_users(offset:int = 0, limit:int=10)->List[User]:
@@ -47,6 +48,7 @@ async def read_users(offset:int = 0, limit:int=10)->List[User]:
         return user_created
     except Exception as e:
         print(e)
+        raise HTTPException(status_code=e.status_code, detail=e.detail)
 
 
 async def find_user(user_id:str)->User:
@@ -61,6 +63,7 @@ async def find_user(user_id:str)->User:
         return user
     except Exception as e:
         print(e)
+        raise HTTPException(status_code=e.status_code, detail=e.detail)
 
 async def delete_user(user_id:str)->User:
     try:
@@ -72,4 +75,5 @@ async def delete_user(user_id:str)->User:
         return user
     except Exception as e:
         print(e)
+        raise HTTPException(status_code=e.status_code, detail=e.detail)
 

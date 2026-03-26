@@ -1,5 +1,5 @@
 from typing import Optional, List
-from datetime import datetime
+from datetime import datetime, timezone
 from uuid import uuid4
 
 from sqlmodel import Field, SQLModel, Relationship
@@ -18,11 +18,14 @@ class User(SQLModel, table=True):
     accounts: List["Account"] = Relationship(back_populates='user')
 
 
+def get_now():
+    return datetime.now(timezone.utc)
+
 class Account(SQLModel, table=True):
     id: str | None = Field(default_factory=create_id, primary_key=True)
     status: str = Field(index=True, default='actived')
-    created_date: datetime = Field(index=True, default_factory=datetime.now())
-    updated_date: datetime = Field(index=True, default_factory=datetime.now())
+    created_date: datetime = Field(index=True, default_factory=get_now)
+    updated_date: datetime = Field(index=True, default_factory=get_now)
     agency: int = Field(index=True)
     number: int = Field(index=True)
     user_id: str | None = Field(default=None, foreign_key='user.id')
@@ -34,8 +37,8 @@ class Transaction(SQLModel, table=True):
     id: str | None = Field(default_factory=create_id, primary_key=True)
     ammount: int = Field(index=True)
     status: str = Field(index=True, default='processing')
-    created_date: datetime = Field(index=True, default_factory=datetime.now())
-    updated_date: datetime = Field(index=True, default_factory=datetime.now())
+    created_date: datetime = Field(index=True, default_factory=get_now)
+    updated_date: datetime = Field(index=True, default_factory=get_now)
 
     account_id: str | None = Field(default=None, foreign_key='account.id')
     account: Optional["Account"] = Relationship(back_populates='transactions')

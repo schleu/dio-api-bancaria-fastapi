@@ -14,13 +14,13 @@ async def get_accounts_by_user(
     limit: Annotated[int, Query(le=100)] = 100
 )->list[User]:
     try:
-        print('get_accounts_by_user')
         users = db.exec(
                 select(Account)
                 .where(Account.user_id == user_id)
                 .offset(offset)
                 .limit(limit)
             ).all()
+        print(users)
     
         return users
     except Exception as e:

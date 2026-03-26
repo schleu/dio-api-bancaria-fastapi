@@ -17,9 +17,16 @@ async def create_account(payload:accountSchema.AccountPayload):
         return account
     except Exception as e:
         print(e)
+        raise HTTPException(status_code=e.status_code, detail=e.detail)
+
+    
         
 @router.get('/{user_id}')
 async def get_agencies_by_user(user_id:str, offset:int = 0, limit:int=10):
-    agencies = await accountService.get_accounts_by_user(user_id, offset, limit)
+    try:
+        agencies = await accountService.get_accounts_by_user(user_id, offset, limit)
 
-    return [agency for agency in agencies]
+        return [agency for agency in agencies]
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=e.status_code, detail=e.detail)

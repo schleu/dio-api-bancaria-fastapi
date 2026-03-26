@@ -12,8 +12,10 @@ router = APIRouter(
 async def create_user(user:UserPayload):
     try:
         user = await userService.create_user(user)
+        
         if not user:
             raise HTTPException(status_code=400, detail='Error on create user')
+        
         return {
             "id": user.id,
             "name": user.name,
@@ -21,6 +23,7 @@ async def create_user(user:UserPayload):
         }
     except Exception as e:
         print(e)
+        raise HTTPException(status_code=e.status_code, detail=e.detail)
         
 @router.get('')
 async def read_users(offset:int = 0, limit:int=10):
@@ -31,6 +34,7 @@ async def read_users(offset:int = 0, limit:int=10):
         
         return [{"id": user.id, "name": user.name} for user in users]
     except Exception as e:
+        raise HTTPException(status_code=e.status_code, detail=e.detail)
         print(e)
 
 @router.get('/{user_id}')
@@ -46,6 +50,7 @@ async def get_user(user_id:str):
         }
     except Exception as e:
         print(e)
+        raise HTTPException(status_code=e.status_code, detail=e.detail)
         
 @router.delete('/{user_id}')
 async def delete_user(user_id:str):
