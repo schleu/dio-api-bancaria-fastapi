@@ -1,10 +1,11 @@
 from typing import Annotated
-from fastapi import Query, HTTPException
+from fastapi import Query
 from sqlmodel import select
 from sqlalchemy import func, desc
 
 from ..db.connection import get_session
 from ..db.models import User, Account
+from ..db.schemas import TransactionType
 
 db = get_session()
 
@@ -60,5 +61,40 @@ async def get_account_amount_by_agency(agency:int):
         
         return data
     except Exception as e:
-        print('❌ Error on create an Account.')
+        print('❌ [DB] Error on create an Account.')
         print(e)
+
+
+async def get_balance(account_id:str):
+    try:
+        data = db.exec(
+            select(Account.balance)
+            .where(Account.id == account_id)
+        ).one()
+        
+        return data
+    except Exception as e:
+        print(f'❌ [DB] Error on get balance for {account_id}.')
+        print(e)
+
+async def update_balance(account_id:str, value:float, type:TransactionType ):
+    try:
+        print('update_balance')
+        data = db.get(Account,account_id)
+
+        if type == 'deposit':
+            data.balance += value
+        else:
+            data.balance -= value
+
+        db.add(data)
+        db.commit()
+        db.refresh(data)
+        
+        return data
+    except Exception as e:
+        db.rollback()
+        print('❌ [DB] Error on update balance.')
+        print(e)
+    finally:
+        pass

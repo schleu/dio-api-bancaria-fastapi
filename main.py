@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from dotenv import load_dotenv
 from src.user.user import router as UserRouter
 from src.account.account import router as AccountRouter
+from src.transactions.transactions import router as TransactionRouter
 from typing import AsyncGenerator
 import os
 
@@ -26,10 +27,6 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     clear_terminal()
     create_db_and_tables()
  
-    
-
-
-
 app = FastAPI(lifespan=lifespan)
 load_dotenv()
 
@@ -46,3 +43,4 @@ def get_data():
 # app.add_route(UserRouter)
 app.include_router(UserRouter)
 app.include_router(AccountRouter)
+app.include_router(TransactionRouter)

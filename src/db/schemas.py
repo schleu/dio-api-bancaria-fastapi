@@ -12,13 +12,13 @@ class Account:
     number:int
     user_id:str
 
-class TransactionType: Literal['withdraw','deposit']
+TransactionType = Literal['withdraw','deposit']
 
-class TransactionStatus: Literal['processing','success','error']
+TransactionStatus = Literal['processing','success','error']
 
 class Transaction:
     id:str
-    user_id:str
+    account_id:str
     amount:float
     type: TransactionType
     status:TransactionStatus
