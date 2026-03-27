@@ -45,6 +45,9 @@ async def get_balance(account_id:str):
 
 async def update_balance(account_id:str, amount:float, type: TransactionType):
     try:
+
+        amount = amount if type == 'deposit' else amount * -1
+
         await accountDB.update_balance(account_id, amount, type)
         return True
     except Exception as e:

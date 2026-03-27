@@ -75,17 +75,16 @@ async def get_balance(account_id:str):
         return data
     except Exception as e:
         print(f'❌ [DB] Error on get balance for {account_id}.')
-        print(e)
+        print(e)    
 
 async def update_balance(account_id:str, value:float, type:TransactionType ):
     try:
         print('update_balance')
         data = db.get(Account,account_id)
 
-        if type == 'deposit':
-            data.balance += value
-        else:
-            data.balance -= value
+        print(type)
+
+        data.balance += value
 
         db.add(data)
         db.commit()

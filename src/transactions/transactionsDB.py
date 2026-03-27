@@ -1,5 +1,8 @@
 from ..db.connection import get_session
 from ..db.models import Transaction, get_now, TransactionStatus
+from sqlmodel import select
+from sqlalchemy import desc
+from datetime import datetime
 
 db = get_session()
 
@@ -15,15 +18,8 @@ async def create_transaction(data:Transaction):
 
 async def update_transaction_status(data:Transaction, status:TransactionStatus):
     try:
-        print('')
-        print(data)
-        print('')
-        print('')
         # data.updated_date = get_now()
         data.status = status
-
-        print(data)
-        print('')
 
         db.add(data)
         db.commit()
@@ -32,3 +28,20 @@ async def update_transaction_status(data:Transaction, status:TransactionStatus):
     except Exception as e:
         print('❌ Error on update transaction status.')
         print(e)
+
+async def  get_transactions_by_account_id(account_id:str, date_limit:datetime, offset:int, limit: int):
+
+    print('date_limit')
+    print(date_limit)
+    data = db.exec(
+        select(Transaction)
+        .where(Transaction.account_id ==  account_id)
+        .where(Transaction.created_date >= date_limit)
+        .offset(offset)
+        .limit(limit)
+        .order_by(desc(Transaction.created_date))
+    ).all()
+
+    print(data)
+
+    return data
