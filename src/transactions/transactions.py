@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from . import transactionService as service
 from .transactionSchema import DepositPayload, WithdrawPayload
 
@@ -8,7 +8,7 @@ router = APIRouter(
     tags=['transactions'],
 )
 
-@router.post('/deposit')
+@router.post('/deposit' )
 async def create_deposit(payload:DepositPayload):
     try:
         transaction = await service.create_deposit(payload)
@@ -39,7 +39,7 @@ async def get_historic(
         account_id:str='d3280a33-ab8c-40ed-b812-8ba027bede0b', 
         period:int=2, 
         offset:int=0, 
-        limit: int=10
+        limit: int=10,
     ):
     try:
         MAX_PERIOD_DAYS  =  60

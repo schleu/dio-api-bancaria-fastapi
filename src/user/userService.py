@@ -51,6 +51,41 @@ async def read_users(offset:int = 0, limit:int=10)->List[User]:
         raise HTTPException(status_code=e.status_code, detail=e.detail)
 
 
+async def sign_in(email:str, password:str)->User:
+    try:
+        if not email:
+            raise HTTPException(status_code=400, detail='Email is required.')
+
+        user = await userDB.get_user_by_email(email)
+
+        if not user:
+            raise HTTPException(status_code=400, detail='Email or Password is invalid.')
+
+        is_valid_password = verify_password(password, user.password)
+
+        if not is_valid_password:
+            raise HTTPException(status_code=400, detail='Email or Password is invalid.')
+        
+        return user
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=e.status_code, detail=e.detail)
+
+async def find_user_by_email(email:str)->User:
+    try:
+        if not email:
+            raise HTTPException(status_code=400, detail='Email request.')
+        
+        user = await userDB.get_user_by_email(email)
+
+        if not user:
+            raise HTTPException(status_code=400, detail='User not exist.')
+        
+        return user
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=e.status_code, detail=e.detail)
+
 async def find_user(user_id:str)->User:
     try:
         if not user_id:

@@ -10,7 +10,7 @@ async def get_accounts_by_user(user_id:str, offset:int = 0, limit:int=10):
 
     return agencies
 
-async def gen_account_data(agency):
+async def generate_account_data(agency):
     amount_account = await accountDB.get_balance(agency)
 
     if amount_account >= MAX_ACCOUNT_PER_AGENCY:
@@ -24,7 +24,7 @@ async def create_account(user_id:str):
     if not last_agency:
         last_agency = 1
 
-    account = await gen_account_data(last_agency)
+    account = await generate_account_data(last_agency)
 
     agency = account['agency']
     number = account['number']

@@ -7,23 +7,6 @@ router = APIRouter(
     prefix='/user',
     tags=['Users'],
 )
-
-@router.post('')
-async def create_user(user:UserPayload):
-    try:
-        user = await userService.create_user(user)
-        
-        if not user:
-            raise HTTPException(status_code=400, detail='Error on create user')
-        
-        return {
-            "id": user.id,
-            "name": user.name,
-            "email": user.email
-        }
-    except Exception as e:
-        print(e)
-        raise HTTPException(status_code=e.status_code, detail=e.detail)
         
 @router.get('')
 async def read_users(offset:int = 0, limit:int=10):
